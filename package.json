@@ -1,0 +1,13 @@
+{
+  "name": "hashmap",
+  "version": "1.0.0",
+  "description": "Odin hashmap",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module"
+}
