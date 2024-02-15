@@ -23,6 +23,7 @@ export default class HashMap {
   }
 
   set(key, value) {
+    if (!key && !value) throw new Error("Incorrect parameters");
     this.pairCount++;
     if (this.pairCount > this.bucketCount * this.loadFactor) {
       this.resize();
@@ -57,27 +58,34 @@ export default class HashMap {
   }
 
   get(key) {
+    if (!key) throw new Error("Incorrect parameters");
     const currentBucket = this.selectBucket(key);
 
     const keyExistIndex = this.keyExistInBucket(currentBucket, key);
+    console.log(keyExistIndex);
 
-    return keyExistIndex ? currentBucket.getValueAt(keyExistIndex).value : null;
+    return keyExistIndex !== null
+      ? currentBucket.getValueAt(keyExistIndex).value
+      : null;
   }
 
   has(key) {
+    if (!key) throw new Error("Incorrect parameters");
     const currentBucket = this.selectBucket(key);
 
     const keyExistIndex = this.keyExistInBucket(currentBucket, key);
 
-    return keyExistIndex ? true : false;
+    return keyExistIndex !== null ? true : false;
   }
 
   remove(key) {
+    if (!key) throw new Error("Incorrect parameters");
     const currentBucket = this.selectBucket(key);
     const keyExistIndex = this.keyExistInBucket(currentBucket, key);
 
-    if (keyExistIndex) {
+    if (keyExistIndex !== null) {
       currentBucket.removeAt(keyExistIndex);
+      this.pairCount--;
       return true;
     } else {
       return false;

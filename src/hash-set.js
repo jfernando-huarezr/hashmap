@@ -11,60 +11,67 @@ export default class HashSet {
     );
   }
 
-  hash(key) {
+  hash(element) {
     let hashCode = 0;
 
     const primeNumber = 31;
-    for (let i = 0; i < key.length; i++) {
-      hashCode = primeNumber * hashCode + key.charCodeAt(i);
+    for (let i = 0; i < element.length; i++) {
+      hashCode = primeNumber * hashCode + element.charCodeAt(i);
     }
 
     return hashCode % this.bucketCount;
   }
 
-  add(key) {
+  add(element) {
+    if (!element) throw new Error("Incorrect parameters");
     this.elementCount++;
     if (this.elementCount > this.bucketCount * this.loadFactor) {
       this.resize();
     }
 
-    const currentBucket = this.selectBucket(key);
+    const currentBucket = this.selectBucket(element);
 
-    const keyExistIndex = this.keyExistInBucket(currentBucket, key);
+    const elementExistIndex = this.elementExistInBucket(currentBucket, element);
 
-    if (!keyExistIndex) {
-      currentBucket.addToEnd(key);
+    if (elementExistIndex === null) {
+      currentBucket.addToEnd(element);
     }
   }
 
   resize() {
     this.bucketCount *= 2;
-    const newBuckets = Array(this.bucketCount).fill(new LinkedList(), 0);
+    const newBuckets = Array.from(
+      { length: this.bucketCount },
+      () => new LinkedList()
+    );
 
     for (const bucket of this.buckets) {
       for (let nodeIndex = 0; nodeIndex < bucket.getLength(); nodeIndex++) {
-        const key = bucket.getValueAt(nodeIndex);
-        const index = this.hash(key);
-        newBuckets[index].addToEnd(key);
+        const element = bucket.getValueAt(nodeIndex);
+        const index = this.hash(element);
+        newBuckets[index].addToEnd(element);
       }
     }
     this.buckets = newBuckets;
   }
 
-  has(key) {
-    const currentBucket = this.selectBucket(key);
+  has(element) {
+    if (!element) throw new Error("Incorrect parameters");
+    const currentBucket = this.selectBucket(element);
 
-    const keyExistIndex = this.keyExistInBucket(currentBucket, key);
+    const elementExistIndex = this.elementExistInBucket(currentBucket, element);
 
-    return keyExistIndex ? true : false;
+    return elementExistIndex !== null ? true : false;
   }
 
-  remove(key) {
-    const currentBucket = this.selectBucket(key);
-    const keyExistIndex = this.keyExistInBucket(currentBucket, key);
+  remove(element) {
+    if (!element) throw new Error("Incorrect parameters");
+    const currentBucket = this.selectBucket(element);
+    const elementExistIndex = this.elementExistInBucket(currentBucket, element);
 
-    if (keyExistIndex) {
-      currentBucket.removeAt(keyExistIndex);
+    if (elementExistIndex !== null) {
+      currentBucket.removeAt(elementExistIndex);
+      this.elementCount--;
       return true;
     } else {
       return false;
@@ -82,12 +89,12 @@ export default class HashSet {
   }
 
   //extras
-  keyExistInBucket(bucket, key) {
-    return bucket.searchAdvanced((value) => value === key);
+  elementExistInBucket(bucket, element) {
+    return bucket.searchAdvanced((value) => value === element);
   }
 
-  selectBucket(key) {
-    const index = this.hash(key);
+  selectBucket(element) {
+    const index = this.hash(element);
 
     if (index < 0 || index >= this.buckets.length) {
       throw new Error("Trying to access index out of bound");

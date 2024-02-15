@@ -17,3 +17,11 @@ userProfile.set("bio", "A software developer who loves to code.");
 
 // Print the HashMap
 console.log(userProfile.entries());
+console.log(userProfile.keys());
+console.log(userProfile.values());
+console.log(userProfile.remove("username"));
+
+console.log(userProfile.entries());
+console.log(userProfile.length());
+userProfile.clear();
+console.log(userProfile.entries());
