@@ -1,6 +1,4 @@
-# hashmap
-Odin hashmap
-
+# Hash Map Class
 HashMap class with the following methods:
 
 1. hash(key): takes a key and produces a hash code with it.
