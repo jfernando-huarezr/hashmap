@@ -231,7 +231,7 @@ export default class LinkedList {
   }
 
   searchAdvanced(callback) {
-    if (!this.head) return false;
+    if (!this.head) return null;
 
     let current = this.head;
     let index = 0;
@@ -243,5 +243,9 @@ export default class LinkedList {
     }
 
     return null;
+  }
+
+  getLength() {
+    return this.length;
   }
 }
